@@ -22,5 +22,6 @@
   "min_scale": 0.85,
   "max_scale": 1.15,
   "random_rotation": true,
-  "position_variance": 0.4
+  "position_variance": 0.4,
+  "blocking_radius": 0.0,
 }

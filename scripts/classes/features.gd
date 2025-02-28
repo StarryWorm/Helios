@@ -37,6 +37,7 @@ var min_scale: float = 1.0
 var max_scale: float = 1.0
 var random_rotation: bool = true
 var position_variance: float = 0.0
+var blocking_radius: float = 0.0  # NEW: Minimum distance between same feature instances
 
 # Visual parameters
 var color: Color = Color.WHITE
@@ -80,6 +81,7 @@ func _init(json_data: String = ""):
 	max_scale = parsed.get("max_scale", 1.0)
 	random_rotation = parsed.get("random_rotation", true)
 	position_variance = parsed.get("position_variance", 0.0)
+	blocking_radius = parsed.get("blocking_radius", 0.0)  # NEW: Initialize from JSON
 	
 	# Color handling
 	if parsed.has("color"):

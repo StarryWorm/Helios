@@ -7,6 +7,9 @@ var noise_generators: Dictionary = {}
 # Dictionary to track generated features by chunk
 var chunk_features: Dictionary = {}
 
+# NEW: Move placed_features to be a class member for persistence across chunks
+var placed_features: Dictionary = {}
+
 # Random number generator (reused)
 var rng: RandomNumberGenerator
 
@@ -17,6 +20,10 @@ func _init(seed_value: int):
 	
 	# Initialize noise generators for all features
 	initialize_noise_generators()
+	
+	# NEW: Initialize the placed_features dictionary
+	for feature_id in ResourceManager.FEATURES:
+		placed_features[feature_id] = []
 
 # Initialize noise generators for all features
 func initialize_noise_generators():
@@ -80,6 +87,35 @@ func generate_feature_maps(chunk_x: int, chunk_z: int, chunk_size: int, base_hei
 				if not _has_space_for_feature(block_x, block_z, feature, chunk_size):
 					continue
 				
+				# Check that all blocks under the feature are at the same height
+				# and aren't water (if feature shouldn't spawn in water)
+				var can_place_height = true
+				for dx in range(feature.width):
+					for dz in range(feature.depth):
+						var fx = block_x + dx
+						var fz = block_z + dz
+						
+						# Skip if out of bounds
+						if fx >= chunk_size or fz >= chunk_size:
+							can_place_height = false
+							break
+						
+						# Check if this block is at the same height as the primary block
+						if height_data[fx][fz] != terrain_height:
+							can_place_height = false
+							break
+							
+						# Check if this block is underwater and feature shouldn't spawn in water
+						if height_data[fx][fz] < base_height and not feature.spawn_in_water:
+							can_place_height = false
+							break
+					
+					if not can_place_height:
+						break
+				
+				if not can_place_height:
+					continue
+				
 				# Get world coordinates for noise sampling
 				var world_x = block_x + chunk_x * chunk_size
 				var world_z = block_z + chunk_z * chunk_size
@@ -112,6 +148,33 @@ func generate_feature_maps(chunk_x: int, chunk_z: int, chunk_size: int, base_hei
 					if not can_place:
 						continue
 					
+					# Check blocking radius constraints
+					if feature.blocking_radius > 0:
+						# Calculate center position of this feature
+						var feature_center_x = block_x + (feature.width / 2.0)
+						var feature_center_z = block_z + (feature.depth / 2.0)
+						var world_center_x = feature_center_x + chunk_x * chunk_size
+						var world_center_z = feature_center_z + chunk_z * chunk_size
+						
+						# Check distance to all previously placed instances of the same feature
+						var within_blocking_radius = false
+						for placed in placed_features[feature_id]:
+							var placed_x = placed.x
+							var placed_z = placed.z
+							
+							# Calculate squared distance (more efficient than using sqrt)
+							var dx = world_center_x - placed_x
+							var dz = world_center_z - placed_z
+							var squared_dist = dx * dx + dz * dz
+							
+							# Check if within blocking radius
+							if squared_dist < feature.blocking_radius * feature.blocking_radius:
+								within_blocking_radius = true
+								break
+						
+						if within_blocking_radius:
+							continue
+					
 					# Mark all blocks as occupied with this feature's priority
 					for dx in range(feature.width):
 						for dz in range(feature.depth):
@@ -134,6 +197,16 @@ func generate_feature_maps(chunk_x: int, chunk_z: int, chunk_size: int, base_hei
 					# Center of the feature should be at the center of its footprint
 					var pos_x = block_x + (feature.width / 2.0) + pos_x_offset
 					var pos_z = block_z + (feature.depth / 2.0) + pos_z_offset
+					
+					# World position for blocking radius tracking
+					var world_pos_x = pos_x + chunk_x * chunk_size
+					var world_pos_z = pos_z + chunk_z * chunk_size
+					
+					# Store world position for blocking radius checks
+					placed_features[feature_id].append({
+						"x": world_pos_x,
+						"z": world_pos_z
+					})
 					
 					# Store the feature instance data
 					feature_instances.append({
@@ -238,3 +311,15 @@ func create_features_for_chunk(chunk: CHUNK):
 		# Add to chunk and store reference
 		chunk.add_child(multi_mesh_instance)
 		chunk.feature_instances[feature_id] = multi_mesh_instance
+
+# NEW: Helper function to get absolute world coordinates from chunk-local coordinates
+func get_world_coordinates(chunk_x: int, chunk_z: int, local_x: float, local_z: float, chunk_size: int) -> Vector2:
+	return Vector2(
+		local_x + chunk_x * chunk_size,
+		local_z + chunk_z * chunk_size
+	)
+
+# NEW: Function to clear tracking data (useful for world regeneration)
+func clear_tracking_data():
+	for feature_id in placed_features:
+		placed_features[feature_id].clear()

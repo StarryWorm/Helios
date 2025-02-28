@@ -40,6 +40,9 @@ func generate_world_mesh(noise_seed: int = -1):
 	# Set up noise and feature generator
 	set_world_noise(noise_seed)
 	
+	# NEW: Clear the feature generator's tracking data
+	feature_generator.clear_tracking_data()
+	
 	# Generate chunks
 	for chunk_x in range(chunk_count):
 		for chunk_z in range(chunk_count):

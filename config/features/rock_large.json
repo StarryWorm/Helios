@@ -14,7 +14,7 @@
   "seed_offset": 400,
   "noise_type": 4,
   "frequency": 0.020,
-  "threshold": 0.4,
+  "threshold": 0.3,
   
   "use_fractal": true,
   "octaves": 3,
@@ -27,6 +27,7 @@
   "max_scale": 0.2,
   "random_rotation": true,
   "position_variance": 0.0,
+  "blocking_radius": 50.0,
   
   "color": {
 	"r": 160,

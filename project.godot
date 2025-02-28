@@ -27,7 +27,7 @@ ResourceManager="*res://scripts/ResourceManager.gd"
 
 window/size/mode=3
 window/size/initial_position_type=3
-mouse_cursor/custom_image="uid://bdsyceb86r7lf"
+mouse_cursor/custom_image="uid://cc0q7g6wecwph"
 
 [dotnet]
 
