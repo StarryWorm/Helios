@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://c18hox01ao6mt"
+path="res://.godot/imported/chest.obj-86dad32951a41d8cb4c6d9ccc559af41.mesh"
+
+[deps]
+
+files=["res://.godot/imported/chest.obj-86dad32951a41d8cb4c6d9ccc559af41.mesh"]
+
+source_file="res://assets/kenney-survival-kit/chest.obj"
+dest_files=["res://.godot/imported/chest.obj-86dad32951a41d8cb4c6d9ccc559af41.mesh", "res://.godot/imported/chest.obj-86dad32951a41d8cb4c6d9ccc559af41.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

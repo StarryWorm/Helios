@@ -1,0 +1,8 @@
+{
+	"type": "tree",
+	"efficiency": 1.0,
+	"passive": true,
+	"recipes": [
+		"wood"
+	]
+}

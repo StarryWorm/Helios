@@ -1,0 +1,8 @@
+{
+	"type": "spear_maker",
+	"efficiency": 1.0,
+	"passive": false,
+	"recipes": [
+		"spear"
+	]
+}

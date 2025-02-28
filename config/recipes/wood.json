@@ -1,0 +1,11 @@
+{
+	"type": "wood",
+	"time": 5.0,
+	"inputs": [],
+	"outputs": [
+		{
+			"name": "wood",
+			"value": 1
+		}
+	]
+}

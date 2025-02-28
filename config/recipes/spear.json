@@ -1,0 +1,20 @@
+{
+	"type": "spear",
+	"time": 1.0,
+	"inputs": [
+		{
+			"name": "wood",
+			"value": 2
+		},
+		{
+			"name": "stone",
+			"value": 1
+		}
+	],
+	"outputs": [
+		{
+			"name": "spear",
+			"value": 1
+		}
+	]
+}

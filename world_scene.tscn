@@ -1,0 +1,73 @@
+[gd_scene load_steps=11 format=3 uid="uid://35jlyu3htxsw"]
+
+[ext_resource type="Script" uid="uid://chw304evhi6c2" path="res://scripts/Main.gd" id="1_cbn5i"]
+[ext_resource type="Script" uid="uid://b8xbt2qdns51k" path="res://scripts/world_controls.gd" id="1_vbdgo"]
+[ext_resource type="Script" uid="uid://ddatjixldyree" path="res://scripts/camera_3d.gd" id="3_ijqok"]
+[ext_resource type="Script" uid="uid://dh64btbfrij0f" path="res://scripts/highlightbox.gd" id="4_cbn5i"]
+[ext_resource type="Script" uid="uid://uhj5b6hp6klt" path="res://scripts/tick_system.gd" id="4_ua7ix"]
+[ext_resource type="Script" uid="uid://cnw406qrn2dmt" path="res://scripts/global_var.gd" id="5_cbn5i"]
+[ext_resource type="Script" uid="uid://cdwx8ii1eh1hy" path="res://scripts/player.gd" id="5_pcaem"]
+
+[sub_resource type="Environment" id="Environment_pcaem"]
+background_mode = 1
+background_color = Color(0.478431, 0.662745, 0.823529, 1)
+background_energy_multiplier = 0.56
+ambient_light_source = 1
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cbn5i"]
+vertex_color_use_as_albedo = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ua7ix"]
+
+[node name="WorldScene" type="Node3D"]
+script = ExtResource("1_cbn5i")
+
+[node name="Scripts" type="Node" parent="."]
+
+[node name="Global" type="Node" parent="Scripts"]
+unique_name_in_owner = true
+script = ExtResource("5_cbn5i")
+manual_chunk_x = 1
+manual_chunk_z = 0
+
+[node name="TickSystem" type="Node" parent="Scripts"]
+unique_name_in_owner = true
+script = ExtResource("4_ua7ix")
+
+[node name="Player" type="Node" parent="Scripts"]
+unique_name_in_owner = true
+script = ExtResource("5_pcaem")
+
+[node name="WorldControls" type="Node" parent="Scripts"]
+unique_name_in_owner = true
+script = ExtResource("1_vbdgo")
+
+[node name="WorldMesh" type="Node3D" parent="."]
+unique_name_in_owner = true
+metadata/_edit_lock_ = true
+
+[node name="MainCamera" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 50.018, 508.365, 50.03)
+current = true
+script = ExtResource("3_ijqok")
+move_speed = 200.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="MainCamera"]
+transform = Transform3D(-0.54024, -0.841511, 1.49482e-15, 0.841511, -0.54024, -1.06581e-14, 1.06581e-14, -3.55271e-15, 1, -49.9869, 49.9232, -482.331)
+layers = 1048575
+light_color = Color(0.359321, 0.494176, 0.289321, 1)
+light_energy = 2.5
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="MainCamera"]
+environment = SubResource("Environment_pcaem")
+
+[node name="HighlightBox" type="MeshInstance3D" parent="MainCamera"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -50.018, 50.03, -508.365)
+material_override = SubResource("StandardMaterial3D_cbn5i")
+mesh = SubResource("ArrayMesh_ua7ix")
+skeleton = NodePath("../..")
+script = ExtResource("4_cbn5i")
