@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://35jlyu3htxsw"]
+[gd_scene load_steps=12 format=3 uid="uid://35jlyu3htxsw"]
 
 [ext_resource type="Script" uid="uid://chw304evhi6c2" path="res://scripts/Main.gd" id="1_cbn5i"]
 [ext_resource type="Script" uid="uid://b8xbt2qdns51k" path="res://scripts/world_controls.gd" id="1_vbdgo"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://uhj5b6hp6klt" path="res://scripts/tick_system.gd" id="4_ua7ix"]
 [ext_resource type="Script" uid="uid://cnw406qrn2dmt" path="res://scripts/global_var.gd" id="5_cbn5i"]
 [ext_resource type="Script" uid="uid://cdwx8ii1eh1hy" path="res://scripts/player.gd" id="5_pcaem"]
+[ext_resource type="Script" uid="uid://btsudcfcgrs83" path="res://scripts/ResourceManager.gd" id="6_pcaem"]
 
 [sub_resource type="Environment" id="Environment_pcaem"]
 background_mode = 1
@@ -19,7 +20,7 @@ glow_enabled = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cbn5i"]
 vertex_color_use_as_albedo = true
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_ua7ix"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_pcaem"]
 
 [node name="WorldScene" type="Node3D"]
 script = ExtResource("1_cbn5i")
@@ -43,6 +44,10 @@ script = ExtResource("5_pcaem")
 [node name="WorldControls" type="Node" parent="Scripts"]
 unique_name_in_owner = true
 script = ExtResource("1_vbdgo")
+
+[node name="ResourceManager" type="Node" parent="Scripts"]
+unique_name_in_owner = true
+script = ExtResource("6_pcaem")
 
 [node name="WorldMesh" type="Node3D" parent="."]
 unique_name_in_owner = true
@@ -68,6 +73,6 @@ environment = SubResource("Environment_pcaem")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -50.018, 50.03, -508.365)
 material_override = SubResource("StandardMaterial3D_cbn5i")
-mesh = SubResource("ArrayMesh_ua7ix")
+mesh = SubResource("ArrayMesh_pcaem")
 skeleton = NodePath("../..")
 script = ExtResource("4_cbn5i")

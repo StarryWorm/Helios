@@ -13,6 +13,11 @@ var mesh_path: String  # Path to mesh file in res://assets/meshes/
 # Generator association
 var generator: GeneratorStruct  # Direct reference to associated generator
 
+# Feature size and priority
+var width: int = 1  # Width in blocks (x-axis)
+var depth: int = 1  # Depth in blocks (z-axis)
+var priority: int = 0  # Higher number = higher priority for collision resolution
+
 # Noise parameters
 var seed_offset: int
 var noise_type: int = FastNoiseLite.TYPE_PERLIN
@@ -36,11 +41,6 @@ var position_variance: float = 0.0
 # Visual parameters
 var color: Color = Color.WHITE
 
-# Interaction parameters
-var harvestable: bool = false
-var harvest_amount: int = 1
-var respawn_time: float = -1.0  # -1 means no respawn
-
 func _init(json_data: String = ""):
 	if json_data.is_empty():
 		return
@@ -54,6 +54,11 @@ func _init(json_data: String = ""):
 	feature_type = parsed.get("feature_type", "")
 	display_name = parsed.get("display_name", "")
 	description = parsed.get("description", "")
+	
+	# Add feature size and priority
+	width = parsed.get("width", 1)
+	depth = parsed.get("depth", 1)
+	priority = parsed.get("priority", 0)
 	
 	mesh_path = parsed.get("mesh_path", "")
 	# Generator will be associated later in ResourceManager
@@ -81,10 +86,6 @@ func _init(json_data: String = ""):
 		var color_data = parsed["color"]
 		if color_data is Dictionary and color_data.has("r") and color_data.has("g") and color_data.has("b"):
 			color = Color(color_data.r/255.0, color_data.g/255.0, color_data.b/255.0)
-	
-	harvestable = parsed.get("harvestable", false)
-	harvest_amount = parsed.get("harvest_amount", 1)
-	respawn_time = parsed.get("respawn_time", -1.0)
 	
 	# Store generator_id string to be resolved later
 	if parsed.has("generator_id"):

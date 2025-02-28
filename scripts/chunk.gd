@@ -28,6 +28,9 @@ const DIRT_COLOR = Color(48/255.0, 38/255.0, 22/255.0, 1.0)
 var feature_data: Dictionary = {}
 var feature_instances: Dictionary = {}
 
+# Feature position map for quick lookup
+var feature_position_map: Dictionary = {}
+
 func _init(chunk_x, chunk_z, chunk_size):
 	self.x = chunk_x
 	self.z = chunk_z
@@ -112,6 +115,9 @@ func generate_terrain():
 		height_data[block_x] = height_data_z
 
 func generate_features(feature_generator: FeatureGenerator):
+	# Clear feature position map
+	feature_position_map.clear()
+	
 	# Generate feature maps based on terrain data
 	feature_data = feature_generator.generate_feature_maps(
 		x, z, size, 
@@ -248,18 +254,85 @@ func generate_chunk_mesh():
 		add_child(mesh_instance)
 
 func add_features(feature_generator: FeatureGenerator):
-	# Clear any existing feature instances
+	# Clear any existing feature instances and position map
 	for feature_id in feature_instances:
 		var instance = feature_instances[feature_id]
 		if instance != null and is_instance_valid(instance):
 			instance.queue_free()
 	
 	feature_instances.clear()
+	feature_position_map.clear()
 	
 	# Create feature instances using the feature generator
 	feature_generator.create_features_for_chunk(self)
+	
+	# Update the feature position map
+	update_feature_position_map()
+
+# Create a map of positions to features for quick lookup
+func update_feature_position_map():
+	feature_position_map.clear()
+	
+	for feature_id in feature_instances:
+		var instance = feature_instances[feature_id]
+		if not is_instance_valid(instance):
+			continue
+			
+		# Get feature data
+		var width = 1
+		var depth = 1
+		var priority = 0
+		
+		if instance.has_meta("width"):
+			width = instance.get_meta("width")
+		if instance.has_meta("depth"):
+			depth = instance.get_meta("depth")
+		if instance.has_meta("priority"):
+			priority = instance.get_meta("priority")
+			
+		# Calculate the bottom-left corner of the feature (in local chunk space)
+		var local_pos = instance.transform.origin
+		var start_x = int(local_pos.x - (width / 2.0))
+		var start_z = int(local_pos.z - (depth / 2.0))
+		
+		# Add all positions occupied by this feature
+		for dx in range(width):
+			for dz in range(depth):
+				var pos = Vector2i(start_x + dx, start_z + dz)
+				
+				# Only add if this position is within the chunk
+				if pos.x >= 0 and pos.x < size and pos.y >= 0 and pos.y < size:
+					# Check if already occupied by higher priority feature
+					if feature_position_map.has(pos):
+						var existing_priority = feature_position_map[pos].priority
+						if priority > existing_priority:
+							feature_position_map[pos] = {
+								"feature_id": feature_id,
+								"instance": instance,
+								"priority": priority
+							}
+					else:
+						feature_position_map[pos] = {
+							"feature_id": feature_id,
+							"instance": instance,
+							"priority": priority
+						}
+
+# Get feature at a position (if any)
+func get_feature_at_position(block_x: int, block_z: int) -> Dictionary:
+	var pos = Vector2i(block_x, block_z)
+	if feature_position_map.has(pos):
+		return feature_position_map[pos]
+	return {}
 
 func update_chunk(target_x: int, target_z: int, target_y: int, action: Global.ACTION):
+	# Check if there's a feature at this position
+	var feature = get_feature_at_position(target_x, target_z)
+	if not feature.is_empty():
+		# Handle feature interaction in WorldControls script
+		# Just return here to prevent terrain modification beneath features
+		return
+		
 	# Fast path - check conditions that would make the operation invalid
 	if action == Global.ACTION.BREAK:
 		if target_y <= 1 or target_y != height_data[target_x][target_z]:

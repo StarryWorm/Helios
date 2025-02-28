@@ -67,8 +67,30 @@ func load_configs():
 			else:
 				push_error("Generator ID not found for feature: " + feature.feature_id)
 		
-		FEATURES[file_name] = feature
+		FEATURES[file_name] = feature	
 	print("Loaded features: ", FEATURES.keys())
+
+# Get features by type
+func get_features_by_type(feature_type: String) -> Array[FeatureStruct]:
+	var result: Array[FeatureStruct] = []
+	
+	for feature_id in FEATURES:
+		var feature = FEATURES[feature_id]
+		if feature.feature_type == feature_type:
+			result.append(feature)
+	
+	return result
+
+# Get features by priority
+func get_features_by_priority(min_priority: int, max_priority: int) -> Array[FeatureStruct]:
+	var result: Array[FeatureStruct] = []
+	
+	for feature_id in FEATURES:
+		var feature = FEATURES[feature_id]
+		if feature.priority >= min_priority and feature.priority <= max_priority:
+			result.append(feature)
+	
+	return result
 
 # Helper function for loading files from a directory and store their paths into an array
 func load_files(path: String, extension: String, destination_array: Array) -> void:

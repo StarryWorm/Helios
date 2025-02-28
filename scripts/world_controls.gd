@@ -126,13 +126,17 @@ func mesh_interact(position: Vector3i, event: InputEvent):
 		var chunk_hit_z = position.z % int(chunk_size * chunk_spacing)
 		
 		# Dump if it happened outside the chunks, i.e. spacing > 1, or just beyond the map
-		if chunk_hit_x > chunk_size or chunk_hit_z > chunk_size or chunk_x > chunk_count or chunk_z > chunk_count:
+		if chunk_hit_x >= chunk_size or chunk_hit_z >= chunk_size or chunk_x >= chunk_count or chunk_z >= chunk_count:
 			return
 		
-		var action: Global.ACTION
-		match event.button_index:
-			MOUSE_BUTTON_LEFT:
-				action = Global.ACTION.BREAK
-			MOUSE_BUTTON_RIGHT:
-				action = Global.ACTION.PLACE
-		chunks[Vector2i(chunk_x,chunk_z)].update_chunk(chunk_hit_x, chunk_hit_z, position.y + 1, action)
+		var chunk_key = Vector2i(chunk_x, chunk_z)
+		if not chunks.has(chunk_key):
+			return
+			
+		var chunk = chunks[chunk_key]
+		
+		# Handle the interaction
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			chunk.update_chunk(chunk_hit_x, chunk_hit_z, position.y + 1, Global.ACTION.BREAK)
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			chunk.update_chunk(chunk_hit_x, chunk_hit_z, position.y + 1, Global.ACTION.PLACE)

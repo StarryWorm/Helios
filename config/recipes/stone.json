@@ -1,0 +1,11 @@
+{
+	"type": "stone",
+	"time": 5.0,
+	"inputs": [],
+	"outputs": [
+		{
+			"name": "stone",
+			"value": 1
+		}
+	]
+}

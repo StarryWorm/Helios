@@ -30,10 +30,6 @@ var lacunarity: float = 0.600    # Change in frequency per octave
 var gain: float = 3.00           # Change in strength per octave
 var weighted_strength: float = 0.130  # How much further octaves affect values if previous octaves give strong values
 
-# Tree Var
-var tree_frequency: float = 0.004
-
-
 func _regenerate_test_mesh():
 	%WorldControls.regenerate_test_mesh()
 

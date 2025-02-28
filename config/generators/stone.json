@@ -1,0 +1,8 @@
+{
+	"type": "stone",
+	"efficiency": 1.0,
+	"passive": true,
+	"recipes": [
+		"stone"
+	]
+}

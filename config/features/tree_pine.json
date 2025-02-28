@@ -7,6 +7,10 @@
   "mesh_path": "tree.obj",
   "generator_id": "tree",
   
+  "width": 1,
+  "depth": 1,
+  "priority": 1,
+  
   "seed_offset": 100,
   "noise_type": 4,
   "frequency": 0.004,
@@ -18,9 +22,5 @@
   "min_scale": 0.85,
   "max_scale": 1.15,
   "random_rotation": true,
-  "position_variance": 0.4,
-  
-  "harvestable": true,
-  "harvest_amount": 3,
-  "respawn_time": -1.0
+  "position_variance": 0.4
 }
