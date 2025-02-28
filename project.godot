@@ -13,13 +13,21 @@ config_version=5
 config/name="Helios"
 run/main_scene="uid://35jlyu3htxsw"
 config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/image="uid://cg11xhh1s7mcw"
+config/icon="uid://cg11xhh1s7mcw"
 
 [autoload]
 
 GlobalProfiler="*res://scripts/global_profiler.gd"
 Global="*res://scripts/global_enum.gd"
 ResourceManager="*res://scripts/ResourceManager.gd"
+
+[display]
+
+window/size/mode=3
+window/size/initial_position_type=3
+mouse_cursor/custom_image="uid://bdsyceb86r7lf"
 
 [dotnet]
 
@@ -57,3 +65,7 @@ shift={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194325,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
+
+[rendering]
+
+anti_aliasing/quality/msaa_3d=3
